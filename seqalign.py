@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 import sys
+import pprint
 
 base_idx = { 'A' : 0, 'G' : 1, 'C' : 2, 'T' : 3 }
 PTR_NONE, PTR_GAP1, PTR_GAP2, PTR_BASE = 0, 1, 2, 3
 
+# see for illustration Durbin p.21, Figure 2.5
 def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 	"""return the score of the optimal Needleman-Wunsch alignment for seq1 and seq2
 	   Note: gap_pen should be positive (it is subtracted)
@@ -27,6 +29,7 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 	for i in range(1, n):
 		for j in range(1, m):
 
+			# the bases corresponding to F[i][j] are actually seq1[i-1] and seq2[j-1]
 			ai = base_idx[seq1[i-1]]
 			bj = base_idx[seq2[j-1]]
 
@@ -36,6 +39,14 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 			insert = F[i][j-1]   - gap_pen
 
 			F[i][j] = max(match, delete, insert)
+			result = F[i][j]
+
+			ptr_for_result = { match: PTR_BASE, 
+												delete: PTR_GAP2, 
+												insert: PTR_GAP1}
+
+			TB[i][j] = ptr_for_result[result]
+
 	# YOUR CODE HERE
 	# Fill in the dynamic programming tables F and TB, starting at [1][1]
 	# Hints: The first row and first column of the table F[i][0] and F[0][j] are dummies
@@ -123,3 +134,16 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+
+def alignment_test():
+	seq1 = "AGGTGAT"
+	seq2 = "AGTAA"
+	print "Finding an optimal alignment of {0} and {1}\n".format(seq1, seq2)
+	score, F, TB = seqalignDP(seq1, seq2, S, gap_pen)
+	print "Score matrix:\n"
+	pprint.pprint(F)
+	print "Optimal score: {0}\n".format(score)
+	s1, s2 = traceback(seq1, seq2, TB)
+	print "Optimal alignment:\n{0}\n{1}\n".format(s1, s2)
+
