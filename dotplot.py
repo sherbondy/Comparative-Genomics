@@ -108,40 +108,8 @@ def makeDotplot(filename, hits):
 
     return p
 
-
-def main():
-
-    # NOTE to WINDOWS users:
-    #   If you do not want to use the command line, comment out the command line
-    #   parsing code and hard-code the input filenames.
-    #
-    # For example, use the following:
-    # file1 = "human-hoxa-region.fa"
-    # file2 = "mouse-hoxa-region.fa"
-    # plotfile = "dotplot.jpg"
-
-    # parse command-line arguments
-    if len(sys.argv) < 4:
-        print "you must call program as:  "
-        print "   python ps1-dotplot.py <FASTA 1> <FASTA 2> <PLOT FILE>"
-        print "   PLOT FILE may be *.ps, *.png, *.jpg"
-        sys.exit(1)
-    file1 = sys.argv[1]
-    file2 = sys.argv[2]
-    plotfile = sys.argv[3]
-
-
-
-    # read sequences
-    print "reading sequences"
-    seq1 = readSeq(file1)
-    seq2 = readSeq(file2)
-
-
-    # length of hash key
-    kmerlen = 30
-
-    # hash table for finding hits
+def kmerhits(seq1, seq2, kmerlen):
+        # hash table for finding hits
     lookup = {}
 
     # store sequence hashes in hash table
@@ -149,8 +117,6 @@ def main():
     for i in xrange(len(seq1) - kmerlen + 1):
         key = seq1[i:i+kmerlen]
         lookup.setdefault(key, []).append(i)
-
-
 
     # look up hashes in hash table
     print "hashing seq2..."
@@ -161,6 +127,29 @@ def main():
         # store hits to hits list
         for hit in lookup.get(key, []):
             hits.append((i, hit))
+
+    return hits
+
+def main():
+    # parse command-line arguments
+    if len(sys.argv) < 4:
+        print "you must call program as:  "
+        print "   python ps1-dotplot.py <FASTA 1> <FASTA 2> <PLOT FILE>"
+        print "   PLOT FILE may be *.ps, *.png, *.jpg"
+        sys.exit(1)
+    file1 = sys.argv[1]
+    file2 = sys.argv[2]
+    plotfile = sys.argv[3]
+
+    # read sequences
+    print "reading sequences"
+    seq1 = readSeq(file1)
+    seq2 = readSeq(file2)
+
+    # length of hash key
+    kmerlen = 100
+
+    hits = kmerhits(seq1, seq2, kmerlen)
 
     #
     # hits should be a list of tuples
