@@ -133,3 +133,33 @@ def alignment_test():
 	print "Optimal alignment:\n{0}\n{1}\n".format(s1, s2)
 
 
+def estimate_dist(seq1, seq2):
+	maxlen = max(map(len, (seq1, seq2)))
+	maxscore = S[0][0] * maxlen
+	realscore, F, TB = seqalignDP(seq1, seq2, S, gap_pen)
+	dist = -1 * (realscore - maxscore)
+	return dist
+
+def readSeqs(*seqs):
+	"""takes a variable number of strings as input,
+		 reads seqs located at genes/SEQ.fa
+		 (you don't have to add the dir or .fa),
+		 and returns a tuple of the corresponding sequences."""
+	return map(lambda seq: readSeq("genes/"+seq+".fa"), seqs)
+
+# This returns 530, which corresponds to 70 mya,
+# suggesting a naive scale factor of ~ 132,075
+def estimate_hoxa_dist():
+	seq1, seq2 = readSeqs("human_HoxA13", "mouse_HoxA13")
+	return estimate_dist(seq1, seq2)
+
+y_const = 132075
+
+def estimate_hox_divergence():
+	hseqs = readSeqs("human_HoxA13", "human_HoxD13")
+	mseqs = readSeqs("mouse_HoxA13", "mouse_HoxD13")
+	results  = map(lambda x: apply(estimate_dist, x), [hseqs, mseqs])
+
+	return y_const * sum(results) / 2
+
+
