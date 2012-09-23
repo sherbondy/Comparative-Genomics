@@ -9,20 +9,33 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 	"""return the score of the optimal Needleman-Wunsch alignment for seq1 and seq2
 	   Note: gap_pen should be positive (it is subtracted)
 	"""
-	F = [[0 for j in range(len(seq2)+1)] for i in range(len(seq1)+1)]
+	# initialize the F and TB matrices
+	F  = [[0 for j in range(len(seq2)+1)] for i in range(len(seq1)+1)]
 	TB = [[PTR_NONE for j in range(len(seq2)+1)] for i in range(len(seq1)+1)]
 
+	n = len(seq1) + 1
+	m = len(seq2) + 1
+
 	# initialize dynamic programming table for Needleman-Wunsch alignment (Durbin p.20)
-	for i in range(1,len(seq1)+1):
-		F[i][0] = 0 - i*gap_pen
+	for i in range(1, n):
+		F[i][0]  = 0 - i*gap_pen
 		TB[i][0] = PTR_GAP2 # indicates a gap in seq2
-	for j in range(1,len(seq2)+1):
-		F[0][j] = 0 - j*gap_pen
+	for j in range(1, m):
+		F[0][j]  = 0 - j*gap_pen
 		TB[0][j] = PTR_GAP1 # indicates a gap in seq1
 
+	for i in range(1, n):
+		for j in range(1, m):
 
+			ai = base_idx[seq1[i-1]]
+			bj = base_idx[seq2[j-1]]
 
+			match  = F[i-1][j-1] + S[ai][bj]
+			# careful, gap_pen is positive
+			delete = F[i-1][j]   - gap_pen
+			insert = F[i][j-1]   - gap_pen
 
+			F[i][j] = max(match, delete, insert)
 	# YOUR CODE HERE
 	# Fill in the dynamic programming tables F and TB, starting at [1][1]
 	# Hints: The first row and first column of the table F[i][0] and F[0][j] are dummies
@@ -38,6 +51,7 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 
 
 
+	# return the score, the F matrix, and the backpointer matrix
 	return F[len(seq1)][len(seq2)], F, TB
 
 def traceback(seq1,seq2,TB):
