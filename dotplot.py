@@ -110,11 +110,12 @@ def makeDotplot(filename, hits):
 
 
 def subkeys(key, nth_base):
-    subkeys = [""] * nth_base
+    subkeys = []
+    keylen = len(key)
 
-    for j in range(len(key)):
-        k = j % nth_base
-        subkeys[k] += key[j]
+    for k in range(nth_base):
+        substr_list = [key[j] for j in range(keylen) if (j % nth_base == k)]
+        subkeys.append("".join(substr_list))
 
     return subkeys
 
@@ -159,6 +160,7 @@ def main():
         print "   python ps1-dotplot.py <FASTA 1> <FASTA 2> <PLOT FILE>"
         print "   PLOT FILE may be *.ps, *.png, *.jpg"
         sys.exit(1)
+
     file1 = sys.argv[1]
     file2 = sys.argv[2]
     plotfile = sys.argv[3]
@@ -170,7 +172,7 @@ def main():
 
     # length of hash key
     kmerlen = 60
-    nth_base = 1
+    nth_base = 2
 
     hits = kmerhits(seq1, seq2, kmerlen, nth_base)
 
