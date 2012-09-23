@@ -35,8 +35,8 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 
 			match  = F[i-1][j-1] + S[ai][bj]
 			# careful, gap_pen is positive
-			delete = F[i-1][j]   - gap_pen
-			insert = F[i][j-1]   - gap_pen
+			delete = F[i-1][j] - gap_pen
+			insert = F[i][j-1] - gap_pen
 
 			F[i][j] = max(match, delete, insert)
 			result = F[i][j]
@@ -46,21 +46,6 @@ def seqalignDP(seq1,seq2,subst_matrix,gap_pen):
 												insert: PTR_GAP1}
 
 			TB[i][j] = ptr_for_result[result]
-
-	# YOUR CODE HERE
-	# Fill in the dynamic programming tables F and TB, starting at [1][1]
-	# Hints: The first row and first column of the table F[i][0] and F[0][j] are dummies
-	#        (see for illustration Durbin p.21, Figure 2.5, but be careful what you
-	#         think of as rows and what you think of as columns)
-	#        Hence, the bases corresponding to F[i][j] are actually seq1[i-1] and seq2[j-1].
-	#        Use the dictionary base_idx to convert from the character to an index to
-	#         look up entries of the substitution matrix.
-	#        To get started, you can complete and run the algorithm filling in only F,
-	#         and then figure out how to do TB.
-
-
-
-
 
 	# return the score, the F matrix, and the backpointer matrix
 	return F[len(seq1)][len(seq2)], F, TB
@@ -146,4 +131,5 @@ def alignment_test():
 	print "Optimal score: {0}\n".format(score)
 	s1, s2 = traceback(seq1, seq2, TB)
 	print "Optimal alignment:\n{0}\n{1}\n".format(s1, s2)
+
 
