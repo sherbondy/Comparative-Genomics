@@ -108,14 +108,18 @@ def makeDotplot(filename, hits):
 
     return p
 
+invert_base = { 'A' : 'T', 'T' : 'A', 'C' : 'G', 'G' : 'C'}
 
-def subkeys(key, nth_base):
+def subkeys(key, nth_base, inversions):
     subkeys = []
     keylen = len(key)
 
     # speed tip from:
     # http://wiki.python.org/moin/PythonSpeed/PerformanceTips#String_Concatenation
-    if nth_base != 0:
+    if nth_base == 1:
+        subkeys = [key]
+
+    elif nth_base != 0:
         for k in range(nth_base):
             substr_list = [key[j] for j in range(keylen) if (j % nth_base == k)]
             subkeys.append("".join(substr_list))
@@ -125,19 +129,24 @@ def subkeys(key, nth_base):
         # for every codon, only include the first 2 bases in the hash
         subkeys = ["".join([key[i] for i in range(len(key)) if i % 3 != 2])]
 
+    if inversions:
+        for i in range(len(subkeys)):
+            subkeys.append("".join([invert_base[c] for c in reversed(subkeys[i])]))
+
     return subkeys
 
 
-def kmerhits(seq1, seq2, kmerlen, nth_base=1):
+def kmerhits(seq1, seq2, kmerlen, nth_base=1, inversions=False):
     # hash table for finding hits
     lookup = {}
 
     # store sequence hashes in hash table
     print "hashing seq1..."
-    for i in xrange(len(seq1) - kmerlen + 1):
+    seq1len = len(seq1)
+    for i in xrange(seq1len - kmerlen + 1):
         key = seq1[i:i+kmerlen]
 
-        for subkey in subkeys(key, nth_base):
+        for subkey in subkeys(key, nth_base, inversions):
             lookup.setdefault(subkey, []).append(i)
 
     # match every nth base by 
@@ -148,7 +157,8 @@ def kmerhits(seq1, seq2, kmerlen, nth_base=1):
     for i in xrange(len(seq2) - kmerlen + 1):
         key = seq2[i:i+kmerlen]
 
-        for subkey in subkeys(key, nth_base):
+        # only need to specify inversions for one seq
+        for subkey in subkeys(key, nth_base, False):
             subhits = lookup.get(subkey, [])
             if subhits != []:
                 # store hits to hits list
@@ -179,11 +189,12 @@ def main():
     seq2 = readSeq(file2)
 
     # length of hash key
-    kmerlen = 100
+    kmerlen = 1000
     # match every nth base. Or set to 0 to allow third base mismatches
     nth_base = 1
+    inversions = True
 
-    hits = kmerhits(seq1, seq2, kmerlen, nth_base)
+    hits = kmerhits(seq1, seq2, kmerlen, nth_base, inversions)
 
     #
     # hits should be a list of tuples
