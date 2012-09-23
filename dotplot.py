@@ -113,9 +113,17 @@ def subkeys(key, nth_base):
     subkeys = []
     keylen = len(key)
 
-    for k in range(nth_base):
-        substr_list = [key[j] for j in range(keylen) if (j % nth_base == k)]
-        subkeys.append("".join(substr_list))
+    # speed tip from:
+    # http://wiki.python.org/moin/PythonSpeed/PerformanceTips#String_Concatenation
+    if nth_base != 0:
+        for k in range(nth_base):
+            substr_list = [key[j] for j in range(keylen) if (j % nth_base == k)]
+            subkeys.append("".join(substr_list))
+
+    else:
+        # nth_base = 0 is a special case for third base mismatches
+        # for every codon, only include the first 2 bases in the hash
+        subkeys = ["".join([key[i] for i in range(len(key)) if i % 3 != 2])]
 
     return subkeys
 
@@ -171,8 +179,9 @@ def main():
     seq2 = readSeq(file2)
 
     # length of hash key
-    kmerlen = 60
-    nth_base = 2
+    kmerlen = 100
+    # match every nth base. Or set to 0 to allow third base mismatches
+    nth_base = 1
 
     hits = kmerhits(seq1, seq2, kmerlen, nth_base)
 
