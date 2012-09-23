@@ -108,15 +108,30 @@ def makeDotplot(filename, hits):
 
     return p
 
-def kmerhits(seq1, seq2, kmerlen):
-        # hash table for finding hits
+
+def subkeys(key, nth_base):
+    subkeys = [""] * nth_base
+
+    for j in range(len(key)):
+        k = j % nth_base
+        subkeys[k] += key[j]
+
+    return subkeys
+
+
+def kmerhits(seq1, seq2, kmerlen, nth_base=1):
+    # hash table for finding hits
     lookup = {}
 
     # store sequence hashes in hash table
     print "hashing seq1..."
     for i in xrange(len(seq1) - kmerlen + 1):
         key = seq1[i:i+kmerlen]
-        lookup.setdefault(key, []).append(i)
+
+        for subkey in subkeys(key, nth_base):
+            lookup.setdefault(subkey, []).append(i)
+
+    # match every nth base by 
 
     # look up hashes in hash table
     print "hashing seq2..."
@@ -124,11 +139,18 @@ def kmerhits(seq1, seq2, kmerlen):
     for i in xrange(len(seq2) - kmerlen + 1):
         key = seq2[i:i+kmerlen]
 
-        # store hits to hits list
-        for hit in lookup.get(key, []):
-            hits.append((i, hit))
+        for subkey in subkeys(key, nth_base):
+            subhits = lookup.get(subkey, [])
+            if subhits != []:
+                # store hits to hits list
+                for hit in subhits:
+                    hits.append((i, hit))
+                # break out of loop to avoid doubly counting
+                # exact matches
+                break
 
     return hits
+
 
 def main():
     # parse command-line arguments
@@ -147,9 +169,10 @@ def main():
     seq2 = readSeq(file2)
 
     # length of hash key
-    kmerlen = 100
+    kmerlen = 60
+    nth_base = 1
 
-    hits = kmerhits(seq1, seq2, kmerlen)
+    hits = kmerhits(seq1, seq2, kmerlen, nth_base)
 
     #
     # hits should be a list of tuples
