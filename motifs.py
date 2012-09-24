@@ -36,8 +36,15 @@ def find_motifs():
     print conserved_motifs.most_common(50)
 
     print "Top 50 most *conserved* motifs (conserved / total):"
-    print sorted(conservation_ratios.items(), 
+    top_cons = sorted(conservation_ratios.items(), 
                   key=itemgetter(1), reverse=True)[:50]
+    print top_cons
+
+    bases = Counter()
+    for tup in top_cons:
+      bases.update(tup[0])
+
+    print bases
 
 def main():
   find_motifs()
