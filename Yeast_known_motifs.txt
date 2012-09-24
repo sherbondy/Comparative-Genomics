@@ -1,3 +1,8 @@
+# For my reference:
+# R = unspecified purine (AG)
+# Y = unspecified pyrimidine (TC)
+# N = unknown nucleotide
+
 Name Motif
 ABF1 RTCRYnnnnnACG
 ACE2 GCTGGT
