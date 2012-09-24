@@ -30,12 +30,14 @@ def find_motifs():
     for motif in conserved_motifs:
       conservation_ratios[motif] = float(conserved_motifs[motif]) / motifs[motif]
 
-    print "Total number of conserved hexamers: {0}".format(sum(conserved_motifs.values()))
+    print "Total number of conserved hexamers: {0}".format(
+      sum(conserved_motifs.values()))
     print "50 most *frequent* conserved motifs:"
     print conserved_motifs.most_common(50)
 
-    print "Top 50 most *conserved* motifs (conserved instances / total instances):"
-    print sorted(conservation_ratios.items(), key=itemgetter(1), reverse=True)[:50]
+    print "Top 50 most *conserved* motifs (conserved / total):"
+    print sorted(conservation_ratios.items(), 
+                  key=itemgetter(1), reverse=True)[:50]
 
 def main():
   find_motifs()
