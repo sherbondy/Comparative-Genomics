@@ -8,20 +8,6 @@ This material corresponds to Lecture 16 in the notes posted here:
 
 This is Chapter 22 in the latest textbook draft.
 
-
-(b) Compare the structure of the chapter to last year’s lecture slides. Is the chapter organization clear and logical? Are the section divisions logical and is the material presented in each section relevant? Are transitions between paragraphs and sections smooth? Should large topics be divided into smaller portions that may be easier to understand? Rate the structure of the chapter on a scale of 1 (awful) to 10 (superb) and explain your assessment.
-
-(c) Is the chapter well written and understandable? Are some sections awkward and need to be reworked? How clear and easy to follow is the material on algorithms and computational methods in your chapter? How clear and easy to follow is the material on biological questions? Rate the clarity of the chapter on a scale of 1 to 10 and explain your assessment.
-
-(d) Are some sections stubs and need to be expanded? Would additional relevant material or examples make the chapter easier to understand or more interesting? Rate the completeness of the chapter on a scale of 1 to 10 and explain your assessment.
-
-(e) Are the figures and figure legends clear? Are they useful to the reader? Is there any material presented in figures that would be better expressed in the main text, or vice versa? Are there any figures in the slides that would make the notes clearer? Would creating additional figures be helpful? Do the legends adequately describe the figures? Are the tables in the chapter useful and would additional tables help clarify the material? Rate the quality of the figures, tables, and figure legends on a scale of 1 to 10 and explain your assessment.
-
-(f) Rate the overall quality of the chapter on a scale of 1 to 10 and explain your assessment.
-
-(g) What improvements to the chapter are most needed to make it more useful to students? How do you plan to revise the chapter?
-
-
 ## Scoring Matrix
 <table>
   <thead>
@@ -34,36 +20,64 @@ This is Chapter 22 in the latest textbook draft.
   <tbody>
     <tr>
       <td>Structure</td>
-      <td>10</td>
+      <td>6</td>
       <td>
+        The notes generally follow the progression of Matt's guest lecture.
+        Coverage of the coalescent model is poor. It is currently explained
+        in isolation as the legend for Figure 22.17. The topic deserves its
+        own proper subsection.
       </td>
     </tr>
 
     <tr>
       <td>Clarity</td>
-      <td>10</td>
+      <td>4</td>
       <td>
+        The chapter is poorly written. It's riddled with grammatical errors,
+        and run-on sentences. Algorithm explanations in particular could do 
+        with substantial reshaping to increase clarity. Often phrases are introduced,
+        e.g. gene tree, and remain unexplained until much later in the chapter.
       </td>
     </tr>
 
     <tr>
       <td>Completeness</td>
-      <td>10</td>
+      <td>4</td>
       <td>
+        This chapter is currently very short. It's a little unclear why 
+        this material isn't just part of Chapter 21, since it ends up 
+        revisiting a lot of the same ideas (eg: paralogs v. orthologs)
+        without much added depth. Sections 22.8-22.11 have yet to be 
+        written.
       </td>
     </tr>
 
     <tr>
       <td>Figures</td>
-      <td>10</td>
+      <td>5</td>
       <td>
+        Figures seem to be scattered somewhat
+        randomly throughout the chapter. Many of them are left unexplained,
+        and others aren't explained until 2+ pages after they're displayed.
       </td>
     </tr>
 
     <tr>
       <td>Overall Quality</td>
-      <td>10</td>
-      <td>
+      <td>4</td>
+      <td>This chapter needs a ton of work to thoroughly and clearly
+          cover the material presented. I'd like to substantially rewrite 
+          and expand on the notes. The figures themselves are great, but
+          most are left unexplained.
+      </td>
     </tr>
+
+
+    I plan to write the initial draft of the missing sections at the end of the chapter.
+    I'll also be sweeping through the existing notes to amend typos, poor wording, and run-ons.
+    The diagrams on page 268 need to be broken up and placed in appropriate locations throughout the
+    chapter. Most diagrams also demand further explanation. After correcting the existing content, I'll
+    probably do another sweep through to reconsider how the notes should be organized.
+
   </tbody>
 </table>
